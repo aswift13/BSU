@@ -1,3 +1,4 @@
+# %% [code]
 ---
 title: "Ball State University 2021 - 2022 Womens Basketball Season"
 author: "Alan Morales"
@@ -300,11 +301,9 @@ fig5
 
 ```
 
+# Win Probability Based on Player/Team Statistics 
 
-# Conditional Statistics. 
-
-First of the probability formula or equation. 
-$P(A|B) = \frac{P(A\bigcap B)}{P(B|A)}$
+The following is the conditional probability equation/formula. $P(A|B) = \frac{P(A\bigcap B)}{P(B)}$
 
 ### Example 
 
@@ -317,28 +316,12 @@ $P(B)$ is the probability that event B occurs, BSU out rebounds the opposing tea
 ## Complete season 
 
 
-Out of the 33 games played, Ball State had 11 games where they took more Field Goal attempts and won.
-
-BSU has a 57% chance of winning given they shoot more field goals.
-
-They had 10 games where they took more free throws and won. 
-
-The probability that BSU wins given they shoot more Free Throws is 83%.
-
-They had 10 games where they out rebounded and won. 
-
-The probability that BSU wins given they out rebound their opponent is 90%.
-
-They had 17 games where they had the higher EFG% and won. 
-
-The probability that BSU wins given they have a higher Effective Field Goal Percentage is 89%.
-
 
 ```{r include=FALSE}
 #Rebounds
 BOPPR <- na.omit(ifelse(dfteam$TeamCase == "OPP", dfteam$Rebounds_Total, NA))
 BR    <- na.omit(ifelse(dfteam$TeamCase == "BSU", dfteam$Rebounds_Total, NA))
-#FG_A♥
+#FG_A
 BOPPFT <- na.omit(ifelse(dfteam$TeamCase == "OPP", dfteam$FT_A, NA))
 BFT    <- na.omit(ifelse(dfteam$TeamCase == "BSU", dfteam$FT_A, NA))
 #FG_A
@@ -416,14 +399,10 @@ Szn_Results[nrow(Szn_Results) +1,] <- ux
 
 colnames(Szn_Results) <- c("FG_A >","FT_A >"," Rebounds >","EFG% >")
 rownames(Szn_Results) <- c("Games Won and had higher___ >","P(A ∩ B)","P(B)","P(A|B)")
+Szn_Results <-round(Szn_Results,2)
 Punion <- kable(Szn_Results) %>% kable_material(c("striped", "hover"))
 
 
-Szn_Results
-
-```
-```{r echo=FALSE}
-Punion
 ```
 
 
@@ -475,6 +454,56 @@ meanefg = c(sum(zx$EFG),mean(zx$EFG))
 wszn_res <- data.frame(meanfga, meanreb,meantp,meanefg)
 wszn_res
 ```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+Punion
+```
+
+Field Goal Attempts
+---------
+Out of the 33 games played, Ball State had 11 games where they took more Field Goal attempts and won.
+
+BSU has a 57% chance of winning given they shoot more field goals.
+
+Free Throws Attempts
+---------
+They had 10 games where they attempted more free throws and won. 
+
+The probability that BSU wins given they shoot more Free Throws is 83%.
+
+Rebounds
+---------
+
+They had 10 games where they out rebounded and won. 
+
+The probability that BSU wins given they out rebound their opponent is 90%.
+
+Effective Field Goal Percentage
+---------
+They had 17 games where they had the higher EFG% and won. 
+
+The probability that BSU wins given they have a higher Effective Field Goal Percentage is 89%.
+
+
+
+
+# Apply General Linearized Models
+
+```{r}
+dfbsu <- subset(dfteam, Team == 'BSU')
+dfbsu <- dfbsu %>% mutate(BWL = case_when(W_L == "W" ~ 1,
+                       W_L == "L" ~ 0))
+```
+
+
+```{r}
+mylogit <- glm(BWL ~ EFG   + Rebounds_Total + FT_A + Assist , data = dfbsu, family = binomial())
+summary(mylogit)
+```
+
+
+# Identify Team and Player Statistical Trends. 
+
 
 
 
