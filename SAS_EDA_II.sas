@@ -3,7 +3,7 @@
 /*Importing data */
 /*********************************************************************/
 proc import out=market2
-    datafile="C:\Users\Aswif\OneDrive\Documents\Coding Projects\Marketing\ifood_df.csv"
+    datafile=...\ifood_df.csv"
     dbms=csv
     replace;
     getnames=YES;
@@ -145,7 +145,7 @@ drop AcceptedCmpOverall Z_CostContact Z_Revenue MntRegularProds;
 run;
 
 proc export data=cmp
-    outfile="C:\Users\Aswif\OneDrive\Documents\Coding Projects\Marketing\camp1.csv"
+    outfile="...\camp1.csv"
     dbms=csv
     replace;
 run;
@@ -175,7 +175,7 @@ data re_arrange;
 	run;
 
 proc export data=re_arrange
-    outfile="C:\Users\Aswif\OneDrive\Documents\Coding Projects\Marketing\camp2.csv"
+    outfile="...\camp2.csv"
     dbms=csv
     replace;
 run;
@@ -300,7 +300,7 @@ run;
 /***********************************************************************/
 
 
-ods RTF file="C:\Users\Aswif\OneDrive\Documents\Coding Projects\Marketing\reg1.rtf" style = minimal;
+ods RTF file="...\reg1.rtf" style = minimal;
 
 /*******************************************************/
 /*checking general statistics for all variables*/
